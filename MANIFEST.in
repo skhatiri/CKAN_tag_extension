@@ -1,0 +1,4 @@
+include README.rst
+include LICENSE
+include requirements.txt
+recursive-include ckanext/tag-restriction *.html *.json *.js *.less *.css *.mo
