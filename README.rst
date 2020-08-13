@@ -2,30 +2,30 @@
    these badges work. The necessary Travis and Coverage config files have been
    generated for you.
 
-.. image:: https://travis-ci.org/skhatiri/ckanext-tag-restriction.svg?branch=master
-    :target: https://travis-ci.org/skhatiri/ckanext-tag-restriction
+.. image:: https://travis-ci.org/skhatiri/ckanext-tag_restriction.svg?branch=master
+    :target: https://travis-ci.org/skhatiri/ckanext-tag_restriction
 
-.. image:: https://coveralls.io/repos/skhatiri/ckanext-tag-restriction/badge.svg
-  :target: https://coveralls.io/r/skhatiri/ckanext-tag-restriction
+.. image:: https://coveralls.io/repos/skhatiri/ckanext-tag_restriction/badge.svg
+  :target: https://coveralls.io/r/skhatiri/ckanext-tag_restriction
 
-.. image:: https://img.shields.io/pypi/v/ckanext-tag-restriction.svg
-    :target: https://pypi.org/project/ckanext-tag-restriction/
+.. image:: https://img.shields.io/pypi/v/ckanext-tag_restriction.svg
+    :target: https://pypi.org/project/ckanext-tag_restriction/
     :alt: Latest Version
 
-.. image:: https://img.shields.io/pypi/pyversions/ckanext-tag-restriction.svg
-    :target: https://pypi.org/project/ckanext-tag-restriction/
+.. image:: https://img.shields.io/pypi/pyversions/ckanext-tag_restriction.svg
+    :target: https://pypi.org/project/ckanext-tag_restriction/
     :alt: Supported Python versions
 
-.. image:: https://img.shields.io/pypi/status/ckanext-tag-restriction.svg
-    :target: https://pypi.org/project/ckanext-tag-restriction/
+.. image:: https://img.shields.io/pypi/status/ckanext-tag_restriction.svg
+    :target: https://pypi.org/project/ckanext-tag_restriction/
     :alt: Development Status
 
-.. image:: https://img.shields.io/pypi/l/ckanext-tag-restriction.svg
-    :target: https://pypi.org/project/ckanext-tag-restriction/
+.. image:: https://img.shields.io/pypi/l/ckanext-tag_restriction.svg
+    :target: https://pypi.org/project/ckanext-tag_restriction/
     :alt: License
 
 =============
-ckanext-tag-restriction
+ckanext-tag_restriction
 =============
 
 .. Put a description of your extension here:
@@ -49,17 +49,17 @@ Installation
    For example installing any non-Python dependencies or adding any required
    config settings.
 
-To install ckanext-tag-restriction:
+To install ckanext-tag_restriction:
 
 1. Activate your CKAN virtual environment, for example::
 
      . /usr/lib/ckan/default/bin/activate
 
-2. Install the ckanext-tag-restriction Python package into your virtual environment::
+2. Install the ckanext-tag_restriction Python package into your virtual environment::
 
-     pip install ckanext-tag-restriction
+     pip install ckanext-tag_restriction
 
-3. Add ``tag-restriction`` to the ``ckan.plugins`` setting in your CKAN
+3. Add ``tag_restriction`` to the ``ckan.plugins`` setting in your CKAN
    config file (by default the config file is located at
    ``/etc/ckan/default/ckan.ini``).
 
@@ -78,18 +78,18 @@ None at present
 
 .. # The minimum number of hours to wait before re-checking a resource
    # (optional, default: 24).
-   ckanext.tag-restriction.some_setting = some_default_value
+   ckanext.tag_restriction.some_setting = some_default_value
 
 
 ----------------------
 Developer installation
 ----------------------
 
-To install ckanext-tag-restriction for development, activate your CKAN virtualenv and
+To install ckanext-tag_restriction for development, activate your CKAN virtualenv and
 do::
 
-    git clone https://github.com/skhatiri/ckanext-tag-restriction.git
-    cd ckanext-tag-restriction
+    git clone https://github.com/skhatiri/ckanext-tag_restriction.git
+    cd ckanext-tag_restriction
     python setup.py develop
     pip install -r dev-requirements.txt
 
@@ -105,14 +105,14 @@ To run the tests, do::
 To run the tests and produce a coverage report, first make sure you have
 coverage installed in your virtualenv (``pip install coverage``) then run::
 
-    pytest --ckan-ini=test.ini --cov=ckanext.tag-restriction
+    pytest --ckan-ini=test.ini --cov=ckanext.tag_restriction
 
 
 ----------------------------------------
-Releasing a new version of ckanext-tag-restriction
+Releasing a new version of ckanext-tag_restriction
 ----------------------------------------
 
-ckanext-tag-restriction should be available on PyPI as https://pypi.org/project/ckanext-tag-restriction.
+ckanext-tag_restriction should be available on PyPI as https://pypi.org/project/ckanext-tag_restriction.
 To publish a new version to PyPI follow these steps:
 
 1. Update the version number in the ``setup.py`` file.

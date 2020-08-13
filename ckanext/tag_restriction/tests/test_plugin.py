@@ -1,5 +1,5 @@
 """Tests for plugin.py."""
-import ckanext.tag-restriction.plugin as plugin
+import ckanext.tag_restriction.plugin as plugin
 
 def test_plugin():
     pass
