@@ -7,4 +7,11 @@ FROM ckan/ckan
 USER root
 RUN ln -s $CKAN_VENV/bin/ckan /usr/local/bin/ckan
 COPY ckan-entrypoint.sh /
-CMD ["ckan","-c","/etc/ckan/production.ini", "run", "--host", "0.0.0.0"]
+CMD ["ckan","-c","etc/ckan/production.ini", "run", "--host", "0.0.0.0"]
+
+#adding extension files to container
+COPY . $CKAN_VENV/src/ckanext-tag_restriction/
+#seting up the extension
+RUN . $CKAN_VENV/bin/activate \
+	&& cd $CKAN_VENV/src/ckanext-tag_restriction/ \
+	&& python setup.py develop
