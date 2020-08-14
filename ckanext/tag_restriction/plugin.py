@@ -11,6 +11,9 @@ log = logging.getLogger(__name__)
 #autocomplete api-endpoint 
 AUTOCOMPLETE_API = "https://terminologies.gfbio.org/api/terminologies/suggest?query={}&limit={}"
 
+#search api-endpoint 
+SEARCH_API = "https://terminologies.gfbio.org/api/terminologies/search?query={}"
+
 #minimum tag charachters for calling autocomplete api
 AUTOCOMPLETE_MIN_CHARS = 4
 
@@ -39,9 +42,16 @@ class Tag_RestrictionPlugin(plugins.SingletonPlugin):
         return self.autocomplete_from_GFBio(data_dict['q'],data_dict['limit'])
 
     def tag_name_validator(self,value,context):
-        raise toolkit.Invalid("tag not in GFBio")
+        """customized tag_name_validator, overrides default validator"""
         
+        #calling default validator
+        value = logic.validators.tag_name_validator(value,context)
 
+        if not self.is_in_GFBio(value):
+            raise toolkit.Invalid('\"{}\" is not in GFBio Terminologies'.format(value))
+        return value
+
+        
     def autocomplete_from_GFBio(self, tag, limit):
         """returns suggestions from GFBio terminologies for tags"""
         
@@ -54,4 +64,15 @@ class Tag_RestrictionPlugin(plugins.SingletonPlugin):
         if response['results']:
             return [result['label'] for result in response['results'] ]
         return []
+
+    
+    def is_in_GFBio(self, tag):
+        """checks whether the tag exists in GFBio terminologies"""
+
+        encoded_url = SEARCH_API.format(quote_plus(tag))
+        r = requests.get(encoded_url)
+        response = r.json()
+        if response['results'] and len(response['results']) > 0 :
+            return True
+        return False
 
