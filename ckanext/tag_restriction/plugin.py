@@ -16,7 +16,14 @@ AUTOCOMPLETE_MIN_CHARS = 4
 
 class Tag_RestrictionPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IActions)
+    plugins.implements(plugins.IValidators)
     
+
+    def get_validators(self):
+        """adds the customized tag_name_validator to known validators"""
+        log.info("Overriding default tag_name_validator")
+        return {u'tag_name_validator':self.tag_name_validator}
+
 
     def get_actions(self):
         """adds the customized tag_autocomplete action to the action chain"""
@@ -31,6 +38,9 @@ class Tag_RestrictionPlugin(plugins.SingletonPlugin):
         logic.check_access('tag_autocomplete', context, data_dict)
         return self.autocomplete_from_GFBio(data_dict['q'],data_dict['limit'])
 
+    def tag_name_validator(self,value,context):
+        raise toolkit.Invalid("tag not in GFBio")
+        
 
     def autocomplete_from_GFBio(self, tag, limit):
         """returns suggestions from GFBio terminologies for tags"""
@@ -44,3 +54,4 @@ class Tag_RestrictionPlugin(plugins.SingletonPlugin):
         if response['results']:
             return [result['label'] for result in response['results'] ]
         return []
+
