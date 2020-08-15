@@ -1,21 +1,37 @@
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
+from ckan.common import config
 import requests 
 from urllib import quote_plus
 import logging
 
-
 log = logging.getLogger(__name__)
 
-#autocomplete api-endpoint 
-AUTOCOMPLETE_API = "https://terminologies.gfbio.org/api/terminologies/suggest?query={}&limit={}"
+#autocomplete api-endpoint
+AUTOCOMPLETE_API = config.get('ckan.tag_restriction.autocomplete_api',
+                               '#https://terminologies.gfbio.org/api/terminologies/suggest?query={}&limit={}')
 
-#search api-endpoint 
-SEARCH_API = "https://terminologies.gfbio.org/api/terminologies/search?query={}"
+#search api-endpoint
+SEARCH_API = config.get('ckan.tag_restriction.search_api',
+                        '#https://terminologies.gfbio.org/api/terminologies/search?query={}')
 
 #minimum tag charachters for calling autocomplete api
-AUTOCOMPLETE_MIN_CHARS = 4
+AUTOCOMPLETE_MIN_CHARS = toolkit.asint(config.get('ckan.tag_restriction.autocomplete_min_chars',
+                                   14))
+
+#autocomplete results filed in api response
+AUTOCOMPLETE_RESULT_FIELD = config.get('ckan.tag_restriction.autocomplete_results_field',
+                                       '#results')
+
+#autocomplete tag label filed in api response
+AUTOCOMPLETE_LABEL_FIELD = config.get('ckan.tag_restriction.autocomplete_label_field',
+                                      '#label')
+
+#search results filed in api response
+SEARCH_RESULT_FIELD = config.get('ckan.tag_restriction.search_results_field',
+                                 '#results')
+
 
 class Tag_RestrictionPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IActions)
@@ -39,7 +55,7 @@ class Tag_RestrictionPlugin(plugins.SingletonPlugin):
     def tag_autocomplete(self, original_action, context, data_dict):
         """customized tag_autocomplete action, overrides default action"""
         logic.check_access('tag_autocomplete', context, data_dict)
-        return self.autocomplete_from_GFBio(data_dict['q'],data_dict['limit'])
+        return self.autocomplete_from_API(data_dict['q'],data_dict['limit'])
 
     def tag_name_validator(self,value,context):
         """customized tag_name_validator, overrides default validator"""
@@ -47,32 +63,32 @@ class Tag_RestrictionPlugin(plugins.SingletonPlugin):
         #calling default validator
         value = logic.validators.tag_name_validator(value,context)
 
-        if not self.is_in_GFBio(value):
-            raise toolkit.Invalid('\"{}\" is not in GFBio Terminologies'.format(value))
+        if not self.is_in_tag_API(value):
+            raise toolkit.Invalid('\"{}\" is not in valid tags resource'.format(value))
         return value
 
         
-    def autocomplete_from_GFBio(self, tag, limit):
-        """returns suggestions from GFBio terminologies for tags"""
+    def autocomplete_from_API(self, tag, limit):
+        """returns suggestions from provided api for tags"""
         
-        if len(tag)<AUTOCOMPLETE_MIN_CHARS:
+        if len(tag) < AUTOCOMPLETE_MIN_CHARS:
             return []
 
         encoded_url = AUTOCOMPLETE_API.format(quote_plus(tag), limit)
         r = requests.get(encoded_url)
         response = r.json()
-        if response['results']:
-            return [result['label'] for result in response['results'] ]
+        if response[AUTOCOMPLETE_RESULT_FIELD]:
+            return [result[AUTOCOMPLETE_LABEL_FIELD] for result in response[AUTOCOMPLETE_RESULT_FIELD] ]
         return []
 
     
-    def is_in_GFBio(self, tag):
-        """checks whether the tag exists in GFBio terminologies"""
+    def is_in_tag_API(self, tag):
+        """checks whether the tag exists provided api terminologies"""
 
         encoded_url = SEARCH_API.format(quote_plus(tag))
         r = requests.get(encoded_url)
         response = r.json()
-        if response['results'] and len(response['results']) > 0 :
+        if response[SEARCH_RESULT_FIELD] and len(response[SEARCH_RESULT_FIELD]) > 0 :
             return True
         return False
 

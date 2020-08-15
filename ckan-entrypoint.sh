@@ -54,6 +54,10 @@ if [ ! -e "$CONFIG" ]; then
   echo "adding tag_restriction plugin to config file"
   sed -i '/^ckan.plugins/ s/$/ tag_restriction/' $CKAN_CONFIG/production.ini
 
+  #adding configurations from tag_restriction.ini
+  echo "adding tag_restriction configurations to config file"
+  sed -i "/^\[app:main\]/ r $CKAN_VENV/src/ckanext-tag_restriction/tag_restriction.ini" $CKAN_CONFIG/production.ini
+
 fi
 
 # Get or create CKAN_SQLALCHEMY_URL
