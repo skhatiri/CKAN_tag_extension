@@ -2,7 +2,7 @@
 
 A simple extension for [CKAN](https://ckan.org/)  to restrict dataset tags to be obtained from a source API
 
-Overrides deafault tag autocomplete and validation behaviours of CKAN, making it mandatory for tags to be selected from a specific source.
+Overrides default tag autocomplete and validation behaviours of CKAN, making it mandatory for tags to be selected from a specific source.
 
 the tag source is assumed to be available with public GET apis
 
