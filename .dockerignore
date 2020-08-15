@@ -1,0 +1,11 @@
+.git/
+.gitignore
+Dockerfile
+README.md
+docker-compose.yml
+.vs/
+LICENCE
+env/
+*.pyproj
+*.sln
+.env.template
