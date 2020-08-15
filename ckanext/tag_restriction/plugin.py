@@ -8,6 +8,7 @@ import logging
 
 log = logging.getLogger(__name__)
 
+###reading apis configs from CKAN config, defaults to GFBio Apis
 #autocomplete api-endpoint
 AUTOCOMPLETE_API = config.get('ckan.tag_restriction.autocomplete_api',
                                'https://terminologies.gfbio.org/api/terminologies/suggest?query={}&limit={}')
@@ -34,6 +35,12 @@ SEARCH_RESULT_FIELD = config.get('ckan.tag_restriction.search_results_field',
 
 
 class Tag_RestrictionPlugin(plugins.SingletonPlugin):
+    """provides tag restriction capabilities, based on provided tag autocomplete and search apis
+
+    implements CKAN IActions & IValidators interfaces
+    uses IAction interface to override deafault tag_autocomplete action to provide customized suggestion from registered autocomplete api
+    uses IValidators to override default tag_name_validator to provide additional validity of tags against registered search api
+    """
     plugins.implements(plugins.IActions)
     plugins.implements(plugins.IValidators)
     
@@ -59,7 +66,6 @@ class Tag_RestrictionPlugin(plugins.SingletonPlugin):
 
     def tag_name_validator(self,value,context):
         """customized tag_name_validator, overrides default validator"""
-        
         #calling default validator
         value = logic.validators.tag_name_validator(value,context)
 
@@ -73,7 +79,6 @@ class Tag_RestrictionPlugin(plugins.SingletonPlugin):
         
     def autocomplete_from_API(self, tag, limit):
         """returns suggestions from provided api for tags"""
-        
         if len(tag) < AUTOCOMPLETE_MIN_CHARS:
             return []
 
@@ -92,7 +97,6 @@ class Tag_RestrictionPlugin(plugins.SingletonPlugin):
     
     def is_in_tag_API(self, tag):
         """checks whether the tag exists provided api terminologies"""
-
         encoded_url = SEARCH_API.format(quote_plus(tag))
         try:
             r = requests.get(encoded_url)
@@ -104,4 +108,3 @@ class Tag_RestrictionPlugin(plugins.SingletonPlugin):
             log.error('exception when calling tag search api')
             log.error(e)
             raise e
-
