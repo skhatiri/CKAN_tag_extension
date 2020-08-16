@@ -69,18 +69,15 @@ class Tag_RestrictionPlugin(plugins.SingletonPlugin):
         #calling default validator
         value = logic.validators.tag_name_validator(value,context)
 
-        try:
-            if not self.is_in_tag_API(value):
-                raise toolkit.Invalid('\"{}\" is not in valid tags resource'.format(value))
-        except:
-            raise toolkit.Invalid('error while checking tag validity, contact website administrator')
+        if not self.is_in_tag_API(value):
+            raise toolkit.Invalid('\"{}\" is not in valid tags resource'.format(value))
         return value
 
         
     def autocomplete_from_API(self, tag, limit):
         """returns suggestions from provided api for tags"""
         if len(tag) < AUTOCOMPLETE_MIN_CHARS:
-            return []
+            return ['too short for suggestion']
 
         encoded_url = AUTOCOMPLETE_API.format(quote_plus(tag), limit)
         try:
@@ -107,4 +104,4 @@ class Tag_RestrictionPlugin(plugins.SingletonPlugin):
         except requests.exception.requestException as e:
             log.error('exception when calling tag search api')
             log.error(e)
-            raise e
+            raise toolkit.Invalid('error while checking tag validity, contact website administrator')
