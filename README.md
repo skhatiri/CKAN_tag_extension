@@ -38,7 +38,7 @@ Provide your own apis for tag autocomplete and search (the default config uses [
 $ docker-compose up --build -d
 ```
 
-5. Go to http://localhost:5000 
+5. Go to http://localhost:5000 and login with ``user:"admin", password:"adminadmin"`` or your customized user in ``.env`` file 
 
 #### On your own CKAN instalation:
 
