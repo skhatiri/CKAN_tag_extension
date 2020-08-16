@@ -52,13 +52,13 @@ if [ ! -e "$CONFIG" ]; then
   
   #add our plugin
   echo "adding tag_restriction plugin to config file"
-  sed -i '/^ckan.plugins/ s/$/ tag_restriction/' $CKAN_CONFIG/production.ini
+  sed -i '/^ckan.plugins/ s/$/ tag_restriction/' "$CONFIG"
 
   #adding configurations from tag_restriction.ini
   echo "adding tag_restriction configurations to config file"
-  sed -i "/^\[app:main\]/ r $CKAN_VENV/src/ckanext-tag_restriction/tag_restriction.ini" $CKAN_CONFIG/production.ini
+  sed -i "/^\[app:main\]/ r $CKAN_VENV/src/ckanext-tag_restriction/tag_restriction.ini" "$CONFIG"
 
-fi
+ fi
 
 # Get or create CKAN_SQLALCHEMY_URL
 if [ -z "$CKAN_SQLALCHEMY_URL" ]; then
@@ -79,4 +79,18 @@ fi
 
 set_environment
 ckan --config "$CONFIG" db init
+
+#creating sysadmin user
+if [ -z "$CKAN_SYSADMIN_USER" ]; then
+  echo "Skipping sysadmin creation, CKAN_SYSADMIN_USER not set"
+else 
+  echo "Crating sysadmin user"
+  {
+    ckan -c "$CONFIG" user add $CKAN_SYSADMIN_USER email=$CKAN_SYSADMIN_EMAIL name=$CKAN_SYSADMIN_USER password=$CKAN_SYSADMIN_PASSWORD && 
+    ckan -c "$CONFIG" sysadmin add $CKAN_SYSADMIN_USER 
+  } || { #if above commands fail 
+    echo "Sysadmin user exists" 
+  }
+fi
+
 exec "$@"
