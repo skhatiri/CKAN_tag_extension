@@ -15,3 +15,4 @@ COPY . $CKAN_VENV/src/ckanext-tag_restriction/
 RUN . $CKAN_VENV/bin/activate \
 	&& cd $CKAN_VENV/src/ckanext-tag_restriction/ \
 	&& python setup.py develop
+
