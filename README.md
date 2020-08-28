@@ -29,17 +29,6 @@ $ git clone https://github.com/skhatiri/CKAN_tag_extension.git
 
 Provide your own apis for tag autocomplete and search (the default config uses [GFBio Terminology APIs](https://terminologies.gfbio.org/api/))
 
-#### On Docker
-
-3. Copy [``.env.template``](.env.template) to a new ``.env`` file and edit configurations if needed
-
-4. Go to the root folder of the project and run it using ``docker-compose``
-```
-$ docker-compose up --build -d
-```
-
-5. Go to http://localhost:5000 and login with ``user:"admin", password:"adminadmin"`` or your customized user in ``.env`` file 
-
 #### On your own CKAN instalation:
 
 3. copy tag_restriction configs from [``tag_restriction.ini``](tag_restriction.ini) to the ``[app:main]`` section of the CKAN config file
